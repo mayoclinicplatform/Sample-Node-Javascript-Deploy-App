@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Embedded PostMessage Listener</title>
+<link rel="stylesheet" href="/static/embedded.css" />
+</head>
+<body>
+  <div id="welcome">Awaiting context from parent frame...</div>
+  <div class="hint">This frame listens for a postMessage with the patient/context JSON and will query the gateway for FHIR data.</div>
+
+  <div class="section-title">Received Payload</div>
+  <div id="details">No payload yet.</div>
+
+  <div class="section-title">FHIR Data (from gateway)</div>
+  <div id="fhirData">No FHIR query performed yet.</div>
+
+  <div class="section-title">Microphone</div>
+  <div>
+    <button id="micButton" type="button">Enable Microphone</button>
+    <span id="micStatus" style="margin-left:12px;color:#b00;">Microphone off</span>
+  </div>
+
+  <script src="/static/embedded.js"></script>
+  <script>
+  (function(){
+    var btn = document.getElementById('micButton');
+    var status = document.getElementById('micStatus');
+
+    btn.addEventListener('click', async function(){
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        status.textContent = 'getUserMedia not supported';
+        status.style.color = '#b00';
+        return;
+      }
+      try {
+        var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        window._micStream = stream;
+        status.textContent = 'Microphone is ON';
+        status.style.color = 'green';
+        btn.disabled = true;
+      } catch (err) {
+        status.textContent = 'Microphone access denied or error';
+        status.style.color = '#b00';
+        console.warn('Microphone access error:', err);
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

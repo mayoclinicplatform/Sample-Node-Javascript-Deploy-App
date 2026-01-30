@@ -1,0 +1,23 @@
+{
+  "name": "sample-node-javascript-deploy-app",
+  "version": "1.0.0",
+  "description": "A Node.js Express server for serving an embedded postMessage listener frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "postmessage",
+    "frontend"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
