@@ -52,6 +52,41 @@ Sample-Node-Javascript-Deploy-App/
 - `GET /inference` – Mock inference endpoint (optional)
 - `GET /static/*` – Static assets (CSS, JS)
 
+## SD-JWT Validation
+
+This repository includes a Node.js helper module for validating SD-JWT tokens against the Mayo Clinic Platform introspection endpoint. In production environments, you should not implicitly trust the sd-jwt provided to you. Especially if you are using the username to provide SSO capabilities into your software. Tokens must be validated upon initial receipt against the introspection endpoint. Do not rely on the token alone as proof of validity.
+
+Use `validate_sd_jwt.js` as a sample backend helper when the SD-JWT is received via `postMessage`.
+
+```js
+const { validateSdJwt } = require('./validate_sd_jwt');
+
+async function handleIncomingMessage({ mayoprovidedSecretToken, sdJwt }) {
+  try {
+    const result = await validateSdJwt({
+      token: mayoprovidedSecretToken,
+      sdJwt,
+    });
+    console.log('Introspection result:', result);
+  } catch (err) {
+    console.error('SD-JWT validation failed:', err);
+  }
+}
+```
+
+The default introspection endpoint is `https://catswebapi.mcp.org/api/v1/token/introspect`.
+
+
+
+```js
+await validateSdJwt({
+  token: mayoprovidedSecretToken,
+  sdJwt,
+  host: 'catswebapi.mcp.org',
+  path: '/api/v1/token/introspect',
+});
+```
+
 ## Configuration
 
 ### Port
